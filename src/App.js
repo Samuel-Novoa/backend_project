@@ -1,12 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import routes from "./routes/router";
+import pkj from "../package.json";
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
 
-function App() {
-  return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-  );
-}
+const app = express();
 
-export default App;
+app.use(express.json({ limit: "10mb" }));
+app.use(morgan("tiny"));
+app.use(cors());
+
+app.get("/", (req, res) => {
+  res.json({
+    name: pkj.name,
+    author: pkj.author,
+    version: pkj.version,
+    description: pkj.description,
+  });
+});
+
+routes(app);
+
+export default app;
